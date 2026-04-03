@@ -1,6 +1,6 @@
 # FinTrack — Finance Dashboard
 
-A clean, interactive finance dashboard built with **React + Vite**, **Material UI (MUI)**, **Recharts**, and **Zustand**.
+A clean, interactive finance dashboard built with **React + Vite**, **Material UI (MUI)**, **Recharts**, and **Redux Toolkit**.
 
 ---
 
@@ -33,12 +33,15 @@ npm run preview
 ```
 src/
 ├── components/
-│   ├── Dashboard/          # Overview page
+│   ├── Dashboard/          # Overview page (Charts & Summary)
 │   ├── Transactions/       # Transactions table + modal
 │   ├── Insights/           # Insights & observations
 │   └── Layout/             # Sidebar + responsive AppBar
-├── store/useStore.js       # Zustand global state + persistence
-├── data/mockData.js        # 6 months of mock transactions
+├── store/
+│   ├── store.js            # Redux store setup
+│   ├── financeSlice.js     # Global state + local storage persistence
+│   └── selectors.js        # Redux selector logic
+├── data/mockData.js        # Mock transaction configurations
 ├── theme/theme.js          # MUI light/dark theme
 └── utils/helpers.js        # Formatters, CSV export, aggregations
 ```
@@ -48,12 +51,12 @@ src/
 ## Features
 
 - **Dashboard** — Summary cards, balance trend chart, spending donut, recent transactions
-- **Transactions** — Searchable, filterable, sortable table with pagination + CSV export
+- **Transactions** — Searchable, filterable, sortable table with pagination + CSV/JSON export
 - **Role-Based UI** — Admin (add/edit/delete) vs Viewer (read-only), switchable via sidebar
-- **Insights** — Top category, monthly comparison, savings rate, daily spend, observations
+- **Insights** — Dashboard statistics and analytical insights
 - **Dark Mode** — Full dark/light theme toggle, persisted to localStorage
 - **Responsive** — Mobile, tablet, and desktop layouts
 
 ## Tech Stack
 
-React 18 + Vite · Material UI v5 · Recharts · Zustand · Day.js
+React 18 + Vite · Material UI v5 · Recharts · Redux Toolkit · Day.js
