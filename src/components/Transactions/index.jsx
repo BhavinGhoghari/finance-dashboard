@@ -18,7 +18,12 @@ export default function Transactions() {
   const filters = useSelector(selectFilters);
   const role = useSelector(selectRole);
   const filtered = useSelector(selectFilteredTransactions);
-  const isAdmin = role === "admin";
+  let isAdmin = false;
+  if(role == "admin") {
+    isAdmin = true;
+  } else {
+    isAdmin = false;
+  }
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -26,13 +31,24 @@ export default function Transactions() {
   const [editTx, setEditTx] = useState(null);
   const [exportAnchor, setExportAnchor] = useState(null);
 
-  const handleExportClick = (event) => setExportAnchor(event.currentTarget);
-  const handleExportClose = () => setExportAnchor(null);
+  const handleExportClick = (event) => {
+    setExportAnchor(event.currentTarget);
+  };
+  
+  const handleExportClose = () => {
+    setExportAnchor(null);
+  };
 
   const handleExport = (format) => {
-    if (format === "csv") exportToCSV(filtered);
-    else exportToJSON(filtered);
-    handleExportClose();
+    // check format
+    if (format == "csv") {
+      exportToCSV(filtered);
+    } 
+    if (format == "json") {
+      exportToJSON(filtered);
+    }
+    // close menu
+    setExportAnchor(null);
   };
 
   const handleEdit = (tx) => {
@@ -51,8 +67,16 @@ export default function Transactions() {
     dispatch(setFilter({ key, value }));
   };
 
-  const hasFilters =
-    filters.search || filters.type !== "all" || filters.category !== "all";
+  let hasFilters = false;
+  if (filters.search !== "" && filters.search !== undefined) {
+    hasFilters = true;
+  }
+  if (filters.type !== "all") {
+    hasFilters = true;
+  }
+  if (filters.category !== "all") {
+    hasFilters = true;
+  }
 
   return (
     <Box>
@@ -74,8 +98,8 @@ export default function Transactions() {
             Transactions
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            {filtered.length} transaction{filtered.length !== 1 ? "s" : ""}{" "}
-            found
+            {filtered.length} {" transaction"} 
+            {filtered.length == 1 ? "" : "s"} {" found"}
           </Typography>
         </Box>
         <Stack direction="row" spacing={1.5}>

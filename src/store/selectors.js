@@ -9,10 +9,11 @@ export const selectFilters = (state) => state.finance.filters;
 export const selectFilteredTransactions = (state) => {
   const { transactions, filters } = state.finance;
   const today = dayjs().startOf("day");
-  
-  // Filter out future transactions by default
-  let filtered = transactions.filter(tx => !dayjs(tx.date).isAfter(today, "day"));
 
+  // Filter out future transactions by default
+  let filtered = transactions.filter(
+    (tx) => !dayjs(tx.date).isAfter(today, "day"),
+  );
 
   if (filters.search) {
     const q = filters.search.toLowerCase();

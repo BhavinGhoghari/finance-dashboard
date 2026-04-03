@@ -29,10 +29,23 @@ function AppInner() {
   const activePage = useSelector(selectActivePage);
   const theme = getTheme(darkMode);
 
+  let pageComponent = null;
+  if (activePage == "dashboard") {
+    pageComponent = <Dashboard />;
+  } else if (activePage == "transactions") {
+    pageComponent = <Transactions />;
+  } else if (activePage == "insights") {
+    pageComponent = <Insights />;
+  } else {
+    pageComponent = <Dashboard />;
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Layout>{PAGES[activePage] || <Dashboard />}</Layout>
+      <Layout>
+        {pageComponent}
+      </Layout>
     </ThemeProvider>
   );
 }

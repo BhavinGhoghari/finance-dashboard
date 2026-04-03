@@ -23,21 +23,34 @@ export const getCategoryColor = (category) =>
   CATEGORY_COLORS[category] || "#94A3B8";
 
 export const getMonthlyData = (transactions) => {
-  const months = {};
-  transactions.forEach((tx) => {
-    const key = dayjs(tx.date).format("YYYY-MM");
-    if (!months[key])
+  let months = {};
+  for (let i = 0; i < transactions.length; i++) {
+    let tx = transactions[i];
+    let key = dayjs(tx.date).format("YYYY-MM");
+    if (months[key] == null) {
       months[key] = {
         month: dayjs(tx.date).format("MMM"),
         income: 0,
         expense: 0,
       };
-    if (tx.type === "income") months[key].income += tx.amount;
-    else months[key].expense += tx.amount;
-  });
-  return Object.entries(months)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([, v]) => ({ ...v, balance: v.income - v.expense }));
+    }
+    if (tx.type == "income") {
+      months[key].income = months[key].income + tx.amount;
+    }
+    if (tx.type == "expense") {
+      months[key].expense = months[key].expense + tx.amount;
+    }
+  }
+  
+  let result = [];
+  let keys = Object.keys(months);
+  keys = keys.sort();
+  for (let j = 0; j < keys.length; j++) {
+    let v = months[keys[j]];
+    v.balance = v.income - v.expense;
+    result.push(v);
+  }
+  return result;
 };
 
 export const getCategoryBreakdown = (transactions) => {
@@ -54,41 +67,50 @@ export const getCategoryBreakdown = (transactions) => {
 };
 
 export const getSummary = (transactions) => {
-  const income = transactions
-    .filter((tx) => tx.type === "income")
-    .reduce((s, tx) => s + tx.amount, 0);
-  const expense = transactions
-    .filter((tx) => tx.type === "expense")
-    .reduce((s, tx) => s + tx.amount, 0);
-  return { income, expense, balance: income - expense };
+  let totalIncome = 0;
+  let totalExpense = 0;
+  
+  for(let i=0; i<transactions.length; i++) {
+    if(transactions[i].type == "income") {
+      totalIncome = totalIncome + transactions[i].amount;
+    } else if(transactions[i].type == "expense") {
+      totalExpense = totalExpense + transactions[i].amount;
+    }
+  }
+  
+  let balanceAmount = totalIncome - totalExpense;
+  
+  return { 
+    income: totalIncome, 
+    expense: totalExpense, 
+    balance: balanceAmount 
+  };
 };
 
 export const exportToCSV = (transactions) => {
-  const headers = ["Date", "Description", "Category", "Type", "Amount"];
-  const rows = transactions.map((tx) => [
-    tx.date,
-    tx.description,
-    tx.category,
-    tx.type,
-    tx.amount,
-  ]);
-  const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
+  // making headers
+  let csvStr = "Date,Description,Category,Type,Amount\n";
+  
+  // looping data
+  for (let i = 0; i < transactions.length; i++) {
+    let t = transactions[i];
+    csvStr = csvStr + t.date + "," + t.description + "," + t.category + "," + t.type + "," + t.amount + "\n";
+  }
+
+  let blob = new Blob([csvStr], { type: "text/csv" });
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement("a");
   a.href = url;
-  a.download = `transactions_${dayjs().format("YYYY-MM-DD")}.csv`;
+  a.download = "transactions_" + dayjs().format("YYYY-MM-DD") + ".csv";
   a.click();
-  URL.revokeObjectURL(url);
 };
 
 export const exportToJSON = (transactions) => {
-  const data = JSON.stringify(transactions, null, 2);
-  const blob = new Blob([data], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
+  let jsonString = JSON.stringify(transactions, null, 2);
+  let blob = new Blob([jsonString], { type: "application/json" });
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement("a");
   a.href = url;
-  a.download = `transactions_${dayjs().format("YYYY-MM-DD")}.json`;
+  a.download = "transactions_" + dayjs().format("YYYY-MM-DD") + ".json";
   a.click();
-  URL.revokeObjectURL(url);
 };

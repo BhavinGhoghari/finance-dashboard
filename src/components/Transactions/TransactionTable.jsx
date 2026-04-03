@@ -42,7 +42,7 @@ export default function TransactionTable({
 }) {
   const paged = filteredTransactions.slice(
     page * rowsPerPage,
-    (page + 1) * rowsPerPage
+    (page + 1) * rowsPerPage,
   );
 
   return (

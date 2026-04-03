@@ -40,11 +40,24 @@ export default function TransactionModal({ open, onClose, editTx }) {
   }, [editTx, open]);
 
   const validate = () => {
-    const e = {};
-    if (!form.description.trim()) e.description = "Description is required";
-    if (!form.amount || isNaN(form.amount) || Number(form.amount) <= 0)
+    let e = {};
+    if (form.description.trim() == "") {
+      e.description = "Description is required";
+    }
+    if (
+      form.amount == null ||
+      form.amount == "" ||
+      isNaN(form.amount) == true
+    ) {
       e.amount = "Valid amount required";
-    if (!form.date) e.date = "Date is required";
+    } else {
+      if (Number(form.amount) <= 0) {
+        e.amount = "Valid amount required";
+      }
+    }
+    if (form.date == null || form.date == "") {
+      e.date = "Date is required";
+    }
     return e;
   };
 
@@ -60,11 +73,25 @@ export default function TransactionModal({ open, onClose, editTx }) {
     onClose();
   };
 
-  const expenseCats = CATEGORIES.filter(
-    (c) => !["Salary", "Freelance", "Investment"].includes(c),
-  );
-  const incomeCats = ["Salary", "Freelance", "Investment"];
-  const cats = form.type === "income" ? incomeCats : expenseCats;
+  let expenseCats = [];
+  for (let i = 0; i < CATEGORIES.length; i++) {
+    if (
+      CATEGORIES[i] == "Salary" ||
+      CATEGORIES[i] == "Freelance" ||
+      CATEGORIES[i] == "Investment"
+    ) {
+      // skip
+    } else {
+      expenseCats.push(CATEGORIES[i]);
+    }
+  }
+  let incomeCats = ["Salary", "Freelance", "Investment"];
+  let cats = [];
+  if (form.type == "income") {
+    cats = incomeCats;
+  } else {
+    cats = expenseCats;
+  }
 
   return (
     <Dialog
@@ -109,14 +136,22 @@ export default function TransactionModal({ open, onClose, editTx }) {
               exclusive
               fullWidth
               size="small"
-              onChange={(_, v) =>
-                v &&
-                setForm((f) => ({
-                  ...f,
-                  type: v,
-                  category: v === "income" ? "Salary" : "Food & Dining",
-                }))
-              }
+              onChange={(event, v) => {
+                if (v != null) {
+                  let newCategory = "";
+                  if (v == "income") {
+                    newCategory = "Salary";
+                  } else {
+                    newCategory = "Food & Dining";
+                  }
+                  setForm(function (f) {
+                    let newForm = Object.assign({}, f);
+                    newForm.type = v;
+                    newForm.category = newCategory;
+                    return newForm;
+                  });
+                }
+              }}
               sx={{
                 "& .MuiToggleButton-root": {
                   fontWeight: 600,
