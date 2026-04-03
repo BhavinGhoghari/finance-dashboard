@@ -84,16 +84,20 @@ export default function Transactions() {
         sx={{
           mb: 3,
           display: "flex",
-          alignItems: "flex-start",
+          flexDirection: "row",
+          alignItems: "center",
           justifyContent: "space-between",
-          flexWrap: "wrap",
           gap: 2,
         }}
       >
         <Box>
           <Typography
             variant="h4"
-            sx={{ fontWeight: 800, letterSpacing: "-0.02em" }}
+            sx={{
+              fontWeight: 800,
+              letterSpacing: "-0.02em",
+              fontSize: { xs: "1.25rem", sm: "2.125rem" },
+            }}
           >
             Transactions
           </Typography>
@@ -102,14 +106,15 @@ export default function Transactions() {
             {filtered.length == 1 ? "" : "s"} {" found"}
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1.5}>
+        <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end", flexWrap: "wrap", gap: { xs: 1, sm: 0 } }}>
           <Button
             variant="outlined"
-            startIcon={<FileDownload />}
             onClick={handleExportClick}
             size="small"
+            sx={{ px: { xs: 1, sm: 1.5 }, minWidth: 0 }}
           >
-            Export
+            <FileDownload sx={{ mr: { sm: 0.5 }, fontSize: "1.25rem" }} />
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>Export</Box>
           </Button>
           <Menu
             anchorEl={exportAnchor}
@@ -132,11 +137,12 @@ export default function Transactions() {
           {isAdmin && (
             <Button
               variant="contained"
-              startIcon={<Add />}
               onClick={handleAdd}
               size="small"
+              sx={{ px: { xs: 1, sm: 1.5 }, minWidth: 0 }}
             >
-              Add Transaction
+              <Add sx={{ mr: { sm: 0.5 }, fontSize: "1.25rem" }} />
+              <Box sx={{ display: { xs: "none", sm: "block" } }}>Add Transaction</Box>
             </Button>
           )}
         </Stack>

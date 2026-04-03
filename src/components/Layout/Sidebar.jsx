@@ -303,6 +303,9 @@ export default function Layout({ children }) {
         component="main"
         sx={{
           flex: 1,
+          minWidth: 0,
+          width: "100%",
+          overflowX: "hidden",
           minHeight: "100vh",
           bgcolor: "background.default",
           p: { xs: 2, md: 3 },

@@ -48,7 +48,7 @@ export default function TransactionTable({
   return (
     <Card elevation={2}>
       <Box sx={{ overflowX: "auto" }}>
-        <Table size="small">
+        <Table size="small" sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow
               sx={{ "& th": { bgcolor: "background.default", py: 1.5 } }}

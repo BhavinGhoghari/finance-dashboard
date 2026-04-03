@@ -52,7 +52,7 @@ export default function FilterBar({
                 </InputAdornment>
               ) : null,
             }}
-            sx={{ minWidth: 220, flex: 1 }}
+            sx={{ minWidth: { xs: "100%", md: 220 }, flex: { xs: "1 1 100%", md: 1 } }}
           />
           <TextField
             select
@@ -60,7 +60,7 @@ export default function FilterBar({
             label="Type"
             value={filters.type}
             onChange={(e) => handleFilter("type", e.target.value)}
-            sx={{ minWidth: 130 }}
+            sx={{ minWidth: 130, flex: { xs: "1 1 calc(50% - 8px)", sm: "auto" } }}
           >
             <MenuItem value="all">All Types</MenuItem>
             <MenuItem value="income">Income</MenuItem>
@@ -72,7 +72,7 @@ export default function FilterBar({
             label="Category"
             value={filters.category}
             onChange={(e) => handleFilter("category", e.target.value)}
-            sx={{ minWidth: 160 }}
+            sx={{ minWidth: 160, flex: { xs: "1 1 calc(50% - 8px)", sm: "auto" } }}
           >
             <MenuItem value="all">All Categories</MenuItem>
             {CATEGORIES.map((c) => (
@@ -87,7 +87,7 @@ export default function FilterBar({
             label="Sort By"
             value={filters.sortBy}
             onChange={(e) => handleSort("sortBy", e.target.value)}
-            sx={{ minWidth: 130 }}
+            sx={{ minWidth: 130, flex: { xs: "1 1 calc(50% - 8px)", sm: "auto" } }}
           >
             <MenuItem value="date">Date</MenuItem>
             <MenuItem value="amount">Amount</MenuItem>
@@ -99,7 +99,7 @@ export default function FilterBar({
             label="Order"
             value={filters.sortDir}
             onChange={(e) => handleSort("sortDir", e.target.value)}
-            sx={{ minWidth: 110 }}
+            sx={{ minWidth: 110, flex: { xs: "1 1 calc(50% - 8px)", sm: "auto" } }}
           >
             <MenuItem value="desc">Newest</MenuItem>
             <MenuItem value="asc">Oldest</MenuItem>
@@ -110,6 +110,7 @@ export default function FilterBar({
               onClick={handleReset}
               startIcon={<Clear />}
               color="inherit"
+              sx={{ width: { xs: "100%", sm: "auto" } }}
             >
               Clear
             </Button>
